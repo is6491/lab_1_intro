@@ -1,0 +1,15 @@
+---
+title: "Lab 1 | Intro to Everything"
+author: "Jeremy Morris"
+date: "2/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data_import}
+no_vr <- read_csv('new_orleans_vacation_rental.csv')
+ggplot(no_vr) + geom_point(aes(x=x,y=y))
+```
