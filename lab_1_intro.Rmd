@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-```{r data_import}
+```{r data_import,message=FALSE}
 no_vr <- read_csv('new_orleans_vacation_rental.csv')
 ggplot(no_vr) + geom_point(aes(x=x,y=y))
 ```
