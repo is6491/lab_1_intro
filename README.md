@@ -1,1 +1,2 @@
 # Lab 1 for IS 6490
+In this lab, we will attempt to understand how R Markdown works and what it is good for. We will also look at a few ways to get data into R. We will look at basic ways to summarize data quickly, we might create a table in R Markdown for fun and, finally, will create a small visualization.

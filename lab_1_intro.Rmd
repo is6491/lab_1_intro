@@ -7,10 +7,74 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
+library(readr)
 ```
+
+# Overview
+In this lab, we will attempt to understand how R Markdown works and what it is good for. We will also look at a few ways to get data into R. We will look at basic ways to summarize data quickly, we might create a table in R Markdown for fun and, finally, will create a small visualization.
+
+## R Markdown
+R Markdown is a language that allows you to mix raw text/markdown with code chunks from various languages. R Markdown was designed primarily for R, but you can also mix Python and a handful of other languages. There are even ways to transfer objects between the languages (pretty slick if there is a better function in another language). The number of languages is always expanding and improving.
+
+Creating an R Markdown is easy using R Studio. All you need to do is to click the "+" button in the top left and select R Markdown. A wizard opens that will walk you through a few things needed to create the document. You can select HTML or PDF output and can even create slides or other document types with R Markdown. For our purposes, we will always be creating HTML output as that's the only format Canvas will accept (because I told it to).
+
+You can then edit the document and do whatever you like. There are two ways to generate output when you are ready. First, you can click the "Knit" button in the ribbon just below the file tab. Second, you can run the render command providing the filename. I will show how to do this in class (please pay attention). There are pros and cons to using each method.
+
+* __Knit button__: this will run the markdown in a separate console. The primary benefit here is that anything you have going on in the R console will not be affected. However, none of the data or functions created will be added to the global environment. This is more important when you start caching results (I'll talk about this if you ask me questions otherwise, we'll leave it for another time).
+* __Render command__: this command will run all code in the open console, loading all objects and functions into the global environment. This can be great, unless it isn't.
+
+## Running Code
+To run code, you need to define what is called a "code chunk". This is done using the syntax below. This code chunk takes the "mtcars" data set and assigns it to a new variable. We then run the "summary" command. Note that all code and output shows up in the final document.
+
+```{r code_chunk1}
+cars <- mtcars
+summary(cars)
+```
+
+In the following example, we show the output but hide the code. This can be very useful when presenting results to non-R people (most of the world, let's face it). For our purposes, we'll always leave the code visible. We mention this because there are several options that can be passed to each code chunk allowing you a lot of control over the final output.
+
+```{r code_chunk2,echo=FALSE}
+cars <- mtcars
+summary(cars)
+```
+
+## Bringing data into R
+There are many ways to get data into R. The two primary ways we will use in class are:
+
+* Using data sets included in base R (and other packages).
+* Reading data from external text or CSV files.
+
+You can also read data directly from the web and various APIs. If you find yourself needing to do that, let us know and we can help.
+
+### Using included data sets
+There are quite a few data sets that come with R out of the box. The most common being the "iris" data set along with "mtcars" which we saw earlier. To use either of these, you simply need to refer to them as variables. Typing "mtcars" into an R chunk will simply print all of the data out.
+
+```{r mtcars_print}
+mtcars
+```
+
+Other data sets need to be installed via an external library. For example, we might use a data set that includes all flights leaving NYC in 2013. For this, you'll need to load the "nycflights13" library. After that, the "flights" data set should be available. The next chunk, loads that library and prints a summary of the data set (because it has `r nrow(nycflights13::flights)` rows).
+
+```{r flights_data}
+library(nycflights13)
+summary(flights)
+```
+
+### Reading data from files
+The most common way to bring in non-system data sets is to read it from a text or comma-separated-values file. There are a few different functions that allow you to do this. My favorite happens to be the "read_csv" function from the readr library. Note that I have pre-loaded the readr library in the setup code chunk of this document so it will be available for all subsequent R code.
+
+I have downloaded a data set that contains a list of [vacation rentals in New Orleans](https://data.nola.gov/Housing-Land-Use-and-Blight/Vacation-Rentals-Hotels-B-B-short-term-rentals-etc/rbhq-zbz9). The following code reads that data set in using read_csv.
 
 ```{r data_import,message=FALSE}
 no_vr <- read_csv('new_orleans_vacation_rental.csv')
-ggplot(no_vr) + geom_point(aes(x=x,y=y))
+summary(no_vr)
+```
+
+Once we have the data, we can create visualizations like the following. Other labs will focus on how to create visualizations like this one.
+
+```{r viz1,warning=FALSE}
+ggplot(no_vr) + 
+    geom_point(aes(x=x,y=y)) +
+    facet_wrap(~Type,ncol=3) +
+    theme_bw()
 ```
