@@ -4,7 +4,7 @@ author: "Jeremy Morris"
 date: "2/13/2019"
 output: 
   html_document: 
-    theme: lumen
+    theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
