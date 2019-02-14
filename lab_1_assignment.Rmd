@@ -1,0 +1,43 @@
+---
+title: "Lab 1 Assignment"
+author: "Jeremy Morris"
+date: "2/13/2019"
+output: 
+  html_document: 
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Objectives
+
+* Learn the basics of using RStudio Cloud
+* Create an R Markdown document
+* Bring data into R
+* Perform simple data transformation tasks
+
+### Assignment
+
+* Start the assignment in Rstudio Cloud (this will create a version for yourself that I'll be able to see).
+* Create a new R Markdown document and give it a snappy title.
+* Create a section called "What I want to learn this semster" and write a few sentances about what you hope to get out of this class.
+* Create a second section and name it "Working with data"
+* Task 1
+    * Find one of R's built-in data sets (use the `data()` function for a list).
+    * Use one of the simple functions on this data set. Functions include the following.
+        * `select`
+        * `filter`
+        * `arrange`
+        * `mutate`
+* Task 2
+    * Find a data set from the internet, or use a data set you already have. Some good resources below.
+        * https://opendata.utah.gov/
+        * https://sqlbelle.com/2015/01/16/data-sets-for-bianalyticsvisualization-projects/
+        * https://www.reddit.com/r/datasets/ 
+    * Bring that data into R and store it in a variable.
+        * In the file menu in the bottom right pane you'll find a button to upload data from your computer.
+        * Two extra points will be awarded if you figure out how to read the data directly from the web.
+    * Use `group_by`, `summarize` and the pipe `%>%` operator to perform an aggregation. Note: the aggregation doesn't have to make sense.
+* Knit your R Markdown file and upload the html output into Canvas.
