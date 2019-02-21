@@ -41,3 +41,8 @@ knitr::opts_chunk$set(echo = TRUE)
         * Two extra points will be awarded if you figure out how to read the data directly from the web.
     * Use `group_by`, `summarize` and the pipe `%>%` operator to perform an aggregation. Note: the aggregation doesn't have to make sense.
 * Knit your R Markdown file and upload the html output into Canvas.
+
+### Work locally
+If you would prefer to work locally, you can clone the following repository from my GitHub account. Note that I will not be able to see your assignment if you work this way.Go to the following url and fork the repo if you would like to work locally.
+
+https://github.com/jeremydmorris/lab_1_intro.git
