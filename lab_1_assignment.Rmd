@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Start the assignment in Rstudio Cloud (this will create a version for yourself that I'll be able to see).
 * Create a new R Markdown document and give it a snappy title.
-* Create a section called "What I want to learn this semster" and write a few sentances about what you hope to get out of this class.
+* Create a section called "What I want to learn this semester" and write a few sentances about what you hope to get out of this class.
 * Create a second section and name it "Working with data"
 * Task 1
     * Find one of R's built-in data sets (use the `data()` function for a list).
@@ -43,6 +43,6 @@ knitr::opts_chunk$set(echo = TRUE)
 * Knit your R Markdown file and upload the html output into Canvas.
 
 ### Work locally
-If you would prefer to work locally, you can clone the following repository from my GitHub account. Note that I will not be able to see your assignment if you work this way.Go to the following url and fork the repo if you would like to work locally.
+If you would prefer to work locally, you can fork the following repository from my GitHub account. Note that I will not be able to see your assignment if you work this way.Go to the following url and fork the repo if you would like to work locally.
 
-https://github.com/jeremydmorris/lab_1_intro.git
+https://github.com/jeremydmorris/lab_1_intro
