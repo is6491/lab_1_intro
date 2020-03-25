@@ -18,6 +18,26 @@ knitr::opts_chunk$set(echo = TRUE)
 * Bring data into R
 * Perform simple data transformation tasks
 
+### Installation
+In the event that we need to work locally this semester, use the following instructions to install R Studio.
+
+* Download R using the following link: [https://cran.rstudio.com/](https://cran.rstudio.com/).
+* Double click the installer and follow the instructions.
+* Download R Studio using the following link: [https://rstudio.com/products/rstudio/download/#download](https://rstudio.com/products/rstudio/download/#download).
+* Double click the installer and follow the instructions.
+* Once R Studio has been installed, 
+    * Click Project in the top right
+    * Click "New Project"
+    * Click "Version Control"
+    * Click "Git"
+    * Enter the URL https://github.com/is6491/lab_1_intro
+        * Make sure the target folders are where you expect them to be
+    * Click "Create"
+* Once the project is open, 
+    * Open the "package_install.R" file by clicking it in the bottom right pane
+    * Run the file by clicking "Source" in the top left pane
+* You should now be ready to go.
+
 ### Assignment
 
 * Start the assignment in Rstudio Cloud (this will create a version for yourself that I'll be able to see).
