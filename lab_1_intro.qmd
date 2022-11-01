@@ -1,0 +1,217 @@
+---
+title: "Lab 1 | Intro to Everything"
+author: "Jeremy Morris"
+affiliation-title: "University of Utah"
+date: last-modified
+title-block-style: default
+title-block-banner: true
+format: 
+  html:
+      embed-resources: true
+      theme: flatly
+      code-block-bg: true
+      code-block-border-left: "#31BAE9"
+      highlight-style: printing
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+```
+
+# Overview
+In this lab, we will attempt to understand how Quarto works and what it is good for. We will also look at a few ways to get data into R. We will look at basic ways to summarize data quickly, we might create a table in Quarto for fun and, finally, will create a small visualization.
+
+The suggested way to work through this lab is to read through the Quarto file so you can see how the syntax works. Then render the document and look at the HTML version. This will give you a good overview of how the final product is generated from the raw Quarto code.
+
+## Quarto
+Quarto is a newer language that allows you to mix raw text/markdown with code blocks from various languages. Quarto is an update to RMarkdown which was designed primarily for R, but you could also mix Python and a handful of other languages. Quarto is an open-sourced scientific and technical publishing system built on [Pandoc](https://pandoc.org/)
+
+Creating a Quarto file is easy using R Studio. All you need to do is to click the "+" button in the top left and select Quarto Document. A wizard opens that will walk you through a few things needed to create the document. You can select HTML or PDF output and can even create slides or other document types with Quarto. For our purposes, we will always be creating HTML output as that's the only format Canvas will accept (because I told it to).
+
+You can then edit the document and do whatever you like. There are two ways to generate output when you are ready. First, you can click the "Render" button in the ribbon just below the file tab. Second, you can run the render command providing the filename. Details on how this is done follow. There are pros and cons to using each method.
+
+* __Render button__: this will run the file in a separate console. The primary benefit here is that anything you have going on in the R console will not be affected. However, none of the data or functions created will be added to the global environment. This is more important when you start caching results (I'll talk about this if you ask me questions otherwise, we'll leave it for another time).
+* __Render command__: this command will run all code in the open console, loading all objects and functions into the global environment. This can be great, unless it isn't. This can be dangerous if you don't clear your environment, for example, if you run your code blocks out of order. Following is the format for the render command.
+
+```{{r}}
+quarto::quarto_render('filename.qmd')
+```
+
+## Running Code
+To run code, you need to define what is called a "code block". This is done using the syntax below. This code block takes the "mtcars" data set and assigns it to a new variable. We then run the "summary" command. Note that all code and output shows up in the final document. It is often a good idea to give your code blocks a name (as seen below). Note that code block names need to be unique or your code will not run.
+
+```{r code_chunk1}
+cars <- mtcars
+summary(cars)
+```
+
+In the following example, we show the output but hide the code. This can be very useful when presenting results to non-R people (most of the world, let's face it). For our purposes, we'll always leave the code visible. We mention this because there are several options that can be passed to each code block allowing you a lot of control over the final output.
+
+```{r code_chunk2}
+#| echo: false
+cars <- mtcars
+summary(cars)
+```
+
+## Bringing data into R
+There are many ways to get data into R. The two primary ways we will use in class are:
+
+* Using data sets included in base R (and other packages).
+* Reading data from external text or CSV files.
+
+You can also read data directly from the web and various APIs. If you find yourself needing to do that, let us know and we can help.
+
+### Using included data sets
+There are quite a few data sets that come with R out of the box. The most common being the "iris" data set along with "mtcars" which we saw earlier. To use either of these, you simply need to refer to them as variables. Typing "mtcars" into an R chunk will simply print all of the data out.
+
+```{r mtcars_print}
+mtcars
+```
+
+Other data sets need to be installed via an external library. For example, we might use a data set that includes all flights leaving NYC in 2013. For this, you'll need to load the "nycflights13" library. After that, the "flights" data set should be available. The next chunk, loads that library and prints a summary of the data set (because it has `r nrow(nycflights13::flights)` rows).
+
+```{r flights_data}
+library(nycflights13)
+summary(flights)
+```
+
+### Reading data from files
+The most common way to bring in non-system data sets is to read it from a text or comma-separated-values file. There are a few different functions that allow you to do this. My favorite happens to be the `read_csv` function from the `readr` library. Note that I have pre-loaded the `readr` library in the setup code block of this document so it will be available for all subsequent R code.
+
+I have downloaded a data set that contains a list of [vacation rentals in New Orleans](https://data.nola.gov/Housing-Land-Use-and-Blight/Vacation-Rentals-Hotels-B-B-short-term-rentals-etc/rbhq-zbz9). The following code reads that data set in using `read_csv.`
+
+```{r data_import}
+#| message: false
+no_vr <- read_csv('new_orleans_vacation_rental.csv')
+summary(no_vr)
+```
+
+Once we have the data, we can create visualizations like the following. Other labs will focus on how to create visualizations like this one.
+
+```{r viz1}
+#| warning: false
+ggplot(no_vr) + 
+    geom_point(aes(x=x,y=y)) +
+    facet_wrap(~Type,ncol=3) +
+    theme_bw()
+```
+
+***
+
+# Data Manipulation Basics
+
+Proper data visualization requires that data be aggregated at the right levels. In this section we will introduce the `dplyr` library with its associated functions. The `dplyr` library is considered to be the state of the art (by me at least) for easy data manipulation and aggregation. I'll present a summary here, a more in depth dicussion can be found in the `dplyr` [vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html).
+
+All `dplyr` functions follow the same format. The first parameter is always the data set you are operating on, subsequent parameters represent the actions you would like to take. The return value is always a data set (dataframe or tibble). First we'll cover simple functions that return an unaggregated data set.
+
+### Simple table functions
+In this section we'll cover the following functions.
+
+* `select` : return a subset of columns
+* `filter` : return a subset of rows
+* `arrange` : sort rows
+* `mutate` : add a calculated variable
+
+#### select
+The select function returns a subset of columns. This may be necessary for readability or when creating a table. In the following code, we will select a few columns from the `nycflights13` data.
+
+```{r select}
+flights_select <- select(flights,year,month,day,dep_time,arr_time)
+flights_select
+```
+
+A few things to note with this output. Notice that there is some additional formatting applied, every column tells you what type of data it represents, there's a header and a footer that tell you how many rows of data are presented and how many are not. That's because the data set is an enhanced dataframe called a `tibble`. In my opinion, it is better to work with tibbles because of the additional formatting. All `dplyr` functions will work on dataframes but many will return a tibble.
+
+Note also that you don't need to quote the variable names when using `select`. This is a principle of `dplyr` and makes working with functions easier as you don't have to type the extra characters.
+
+If you have non-standard column variables, you can use the backticks to select columns. We'll look at another example using the New Orleans B&B data.
+
+```{r select2}
+no_select <- select(no_vr,Name,Address,`Bedroom limit`,`Guest limit`)
+no_select
+```
+
+You can also rename variables using the select function.
+
+```{r select3}
+no_select_change <- select(no_vr,name=Name,address=Address,
+                           bedroom_limit=`Bedroom limit`,guest_limit=`Guest limit`)
+no_select_change
+```
+
+#### filter
+The filter function works much the same way. It starts with the dataframe or tibble you want to filter and then has a comma separated list of logical statements. Quotes around variables names are not required. If multiple logical statements are passed there is an implied "and", the or operator `|` must be used explicitely.
+
+Simple filter statement with one logical statement.
+
+```{r filter1}
+filter1 <- filter(cars,disp >= 160)
+filter1
+```
+
+Filter statement with implied "and".
+```{r filter2}
+filter2 <- filter(cars,disp >= 160,wt < 3)
+filter2
+```
+
+Filter statement with "or".
+```{r filter3}
+filter(cars,disp >= 160 | wt < 3)
+```
+
+#### arrange
+The arrange function sorts data. This is important generally only when looking at the data but can be important when doing advanced aggregations (like window functions). Data is sorted in ascending order by default. Use the `desc` function or the `-` symbol to sort descending.
+```{r arrange1}
+arrange(cars,disp)
+```
+
+Sorted descending:
+```{r arrange2}
+arrange(cars,-disp)
+```
+
+#### mutate
+The mutate function is used to add a calculated column. This function will return the original data set with the new variable(s) appended on the end of the data set.
+
+```{r mutate}
+mutate(cars,mpg_per_cyl=mpg/cyl)
+```
+
+### Aggregating functions
+There are a few more functions to cover before we're done. These functions serve to help calculate aggregations.
+
+* `group_by` : specifies how data is to be grouped.
+* `summarize` (or `summarise` if you like) : calculates a summary based on how the data is grouped.
+
+We will also introduce the use of the pipe `%>%` operator in this section because it becomes relevant. The pipe is used to make operations more readable as it allows you to chain things together. It is necessary/helpful when aggregating data because you are required to group the data and then summarize it.
+
+#### group_by
+Group by works much like the other functions but has no direct side effects other than some additional output when sending data to the console.
+```{r group_by}
+group_by(cars,gear)
+```
+
+Note that now under the `tibble` heading, the groups are listed. There are really no other obvious side effects. Moving on.
+
+#### summarize
+Summarize is, again, in the same category with group_by, it's utility is really multiplied when used by `group_by`. The following statement groups the data set by gear and calculates the average mpg.
+```{r summarize1}
+summarize(group_by(cars,gear),avg_mpg=mean(mpg))
+```
+
+Note that it can be quite difficult to figure out how this statement works because we need to read it inside out starting with cars, moving to the group_by and then to summarize. The pipe operator allows us to be a little more clear about what is happening.
+```{r summarise_w_pipe}
+cars %>% group_by(gear) %>% summarize(avg_mpg=mean(mpg))
+```
+
+As you can see, the output is the same, but it should be much clearer what is going on with this statement. Note that all of the dplyr functions work the same way. In fact, you can filter the data, add a column using mutate and the group/summarize the data. (Not that this calculation make sense IRL.)
+```{r complex_aggregation}
+cars %>% filter(disp >= 160) %>% mutate(cyl_per_mpg=cyl/mpg) %>% 
+    group_by(gear) %>% summarize(avg_mpg=mean(mpg),avg_cyl_per_mpg=mean(cyl_per_mpg))
+```
+
+I think we're done for the time being.
