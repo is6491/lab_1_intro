@@ -2,9 +2,6 @@
 title: "Lab 1 | Intro to Everything"
 author: "Jeremy Morris"
 affiliation-title: "University of Utah"
-date: last-modified
-title-block-style: default
-title-block-banner: true
 format: 
   html:
       embed-resources: true
