@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Objectives
 
 * Learn the basics of using RStudio Cloud
-* Create an R Markdown document
+* Create a Quarto document
 * Bring data into R
 * Perform simple data transformation tasks
 
